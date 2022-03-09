@@ -25,8 +25,12 @@ const Web3 = require('web3')
     const priceFeedETH = new web3ETH.eth.Contract(aggregatorV3InterfaceETHABI, addrETH);
     priceFeedETH.methods.latestRoundData().call()
         .then((roundData) => {
-            let valuePricefeed = ((roundData.answer)/(10**8)).toFixed(2);
-            console.log("BTC_PRICEFEED_MAINNET", valuePricefeed )
-            console.log("BTC_PRICEFEED_MAINNET", numberToWords(valuePricefeed) )
-            console.log("BTC_PRICEFEED_MAINNET", numberToWords(valuePricefeed).split(" ") )
+            let valuePricefeedNumbers = ((roundData.answer)/(10**8)).toFixed(2);
+            let valuePricefeedWords = numberToWords(valuePricefeedNumbers).split(" ")
+            console.log("BTC_PRICEFEED_MAINNET", valuePricefeedNumbers )
+            console.log("BTC_PRICEFEED_MAINNET")
+            for(let i = 0; i < valuePricefeedWords.length; i++){
+              if(valuePricefeedWords[i] !== "")
+                console.log(valuePricefeedWords[i])
+              }
         });
