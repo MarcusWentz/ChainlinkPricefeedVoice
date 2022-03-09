@@ -40,9 +40,8 @@ async function voicePricefeedBTC() {
 	player.play('btc.mp3', function(err){if (err) throw err})
 	for(let i = 0; i < valuePricefeedWords.length; i++){
 		if(valuePricefeedWords[i] !== "")
-			console.log(valuePricefeedWords[i])
 			console.log(valuePricefeedWords[i] + '.mp3')
-			player.play('btc.mp3', function(err){if (err) throw err})
+			player.play(valuePricefeedWords[i] + '.mp3', function(err){if (err) throw err})
 			await timeout(1500)
 		}
 }
