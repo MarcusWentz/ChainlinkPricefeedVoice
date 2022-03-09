@@ -38,6 +38,7 @@ async function voicePricefeedBTC() {
 	console.log("BTC_PRICEFEED_MAINNET", valuePricefeedNumbers )
 	console.log("BTC")
 	player.play('btc.mp3', function(err){if (err) throw err})
+	await timeout(1500)
 	for(let i = 0; i < valuePricefeedWords.length; i++){
 		if(valuePricefeedWords[i] !== "")
 			console.log(valuePricefeedWords[i] + '.mp3')
