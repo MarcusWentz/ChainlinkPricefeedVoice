@@ -22,21 +22,29 @@ const aggregatorV3InterfaceABI = [{"inputs":[],"name":"decimals","outputs":[{"in
 const priceFeedBTC = new web3ETH.eth.Contract(aggregatorV3InterfaceABI, addressBTCPricefeedAggregatorV3Interface);
 var player = require('play-sound')(opts = {})
 
-priceFeedBTC.methods.latestRoundData().call()
-        .then((roundData) => {
-            let valuePricefeedNumbers = ((roundData.answer)/(10**8)).toFixed(2);
-            let valuePricefeedWords = numberToWords(valuePricefeedNumbers).split(" ")
-            console.log("BTC_PRICEFEED_MAINNET", valuePricefeedNumbers )
-            console.log("BTC")
-						player.play('btc.mp3', function(err){if (err) throw err})
-            for(let i = 0; i < valuePricefeedWords.length; i++){
-              if(valuePricefeedWords[i] !== "")
-                console.log(valuePricefeedWords[i])
-								// try {
-									// console.log(valuePricefeedWords[i] + '.mp3')
-									player.play(valuePricefeedWords[i] + '.mp3', function(err){if (err) throw err})
-								// } catch (e) {
-								// 		console.log(e)
-								// }
-              }
-        });
+function timeout(ms) {
+	return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+let valuePricefeedNumbers;
+let valuePricefeedWords;
+
+async function voicePricefeedBTC() {
+	await priceFeedBTC.methods.latestRoundData().call()
+	        .then((roundData) => {
+	            valuePricefeedNumbers = ((roundData.answer)/(10**8)).toFixed(2);
+	            valuePricefeedWords = numberToWords(valuePricefeedNumbers).split(" ")
+	        });
+	console.log("BTC_PRICEFEED_MAINNET", valuePricefeedNumbers )
+	console.log("BTC")
+	player.play('btc.mp3', function(err){if (err) throw err})
+	for(let i = 0; i < valuePricefeedWords.length; i++){
+		if(valuePricefeedWords[i] !== "")
+			console.log(valuePricefeedWords[i])
+			console.log(valuePricefeedWords[i] + '.mp3')
+			player.play('btc.mp3', function(err){if (err) throw err})
+			await timeout(1500)
+		}
+}
+
+voicePricefeedBTC()
