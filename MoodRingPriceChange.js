@@ -7,7 +7,7 @@ const Web3 = require('web3')
     let valueOld = 0;
     let valueNew = 0;
 
-    // var piblaster = require('pi-blaster.js');
+    var piblaster = require('pi-blaster.js');
     const timeMilliSec = 1000; //2 seconds per value
     const pulseWidthMin = 0.00;
     const pulseWidthMax = 0.35;
@@ -22,21 +22,21 @@ const Web3 = require('web3')
 function processMoodValues() {
   if(valueNew > valueOld) {
     console.log("GREEN")
-     // piblaster.setPwm(objectLED['pin'][0], pulseWidthMin);
-     // piblaster.setPwm(objectLED['pin'][2], pulseWidthMin);
-     // piblaster.setPwm(objectLED['pin'][3], pulseWidthMax);
+     piblaster.setPwm(objectLED['pin'][0], pulseWidthMin);
+     piblaster.setPwm(objectLED['pin'][2], pulseWidthMin);
+     piblaster.setPwm(objectLED['pin'][3], pulseWidthMax);
   }
   if(valueNew < valueOld) {
     console.log("RED")
-     // piblaster.setPwm(objectLED['pin'][0], pulseWidthMax);
-     // piblaster.setPwm(objectLED['pin'][2], pulseWidthMin);
-     // piblaster.setPwm(objectLED['pin'][3], pulseWidthMin);
+     piblaster.setPwm(objectLED['pin'][0], pulseWidthMax);
+     piblaster.setPwm(objectLED['pin'][2], pulseWidthMin);
+     piblaster.setPwm(objectLED['pin'][3], pulseWidthMin);
   }
   if(valueNew == valueOld) {
     console.log("YELLOW")
-     // piblaster.setPwm(objectLED['pin'][0], pulseWidthMin);
-     // piblaster.setPwm(objectLED['pin'][2], pulseWidthMax);
-     // piblaster.setPwm(objectLED['pin'][3], pulseWidthMin);
+     piblaster.setPwm(objectLED['pin'][0], pulseWidthMin);
+     piblaster.setPwm(objectLED['pin'][2], pulseWidthMax);
+     piblaster.setPwm(objectLED['pin'][3], pulseWidthMin);
   }
   console.log("old " + valueOld)
   console.log("new " + valueNew)
