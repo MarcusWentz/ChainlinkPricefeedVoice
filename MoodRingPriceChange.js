@@ -42,42 +42,25 @@ function processMoodValues() {
   console.log("new " + valueNew)
 }
 
-async function start(){
-  priceFeedETH.methods.latestRoundData().call()
-      .then((roundData) => {
-          // Do something with roundData
-          let valueConverted = ((roundData.answer)/(10**8)).toFixed(2)
-          console.log("ETH_PRICE",  valueConverted)
-          valueNew = valueConverted;
-          valueOld = valueNew;
-      });
-
-      processMoodValues()
-
-      await timeout(timeMilliSec)
-}
-
-async function loop(){
-  await timeout(timeMilliSec)
+async function emulatePriceChangeEverySecond(){
   let i = 0; //EMULATE TIME PASSING
   while(true) {
     i++;
     console.log(i)  //EMULATE TIME PASSING
+    valueOld = valueNew //Record old value from last pricefeed request.
     priceFeedETH.methods.latestRoundData().call()
         .then((roundData) => {
             // Do something with roundData
             let valueConverted = ((roundData.answer)/(10**8)).toFixed(2)
             console.log("ETH_PRICE",  valueConverted)
-            if(i%3 == 0){ //GREEN
-              valueNew = valueConverted+1;
+            if(i%3 == 0){ //YELLOW
+              valueNew = valueOld
             }
             if(i%3 == 1) { //RED
-              // valueOld = valueConverted+1;
-              // valueNew = valueConverted;
               valueNew = valueConverted-1;
             }
-            if(i%3 == 2){ ///YELLOW
-            	valueNew = valueOld
+            if(i%3 == 2){ ///GREEN
+              valueNew = valueConverted+1;
             }
 
             processMoodValues()
@@ -88,5 +71,4 @@ async function loop(){
 
 }
 
-start()
-loop()
+emulatePriceChangeEverySecond()
