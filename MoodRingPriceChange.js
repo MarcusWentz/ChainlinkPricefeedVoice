@@ -7,7 +7,7 @@ const Web3 = require('web3')
     let valueOld = 0;
     let valueNew = 0;
 
-    var piblaster = require('pi-blaster.js');
+    // var piblaster = require('pi-blaster.js');
     const timeMilliSec = 1000; //2 seconds per value
     const pulseWidthMin = 0.00;
     const pulseWidthMax = 0.35;
@@ -22,21 +22,21 @@ const Web3 = require('web3')
 function processMoodValues() {
   if(valueNew > valueOld) {
     console.log("GREEN")
-     piblaster.setPwm(objectLED['pin'][0], pulseWidthMin);
-     piblaster.setPwm(objectLED['pin'][2], pulseWidthMin);
-     piblaster.setPwm(objectLED['pin'][3], pulseWidthMax);
+     // piblaster.setPwm(objectLED['pin'][0], pulseWidthMin);
+     // piblaster.setPwm(objectLED['pin'][2], pulseWidthMin);
+     // piblaster.setPwm(objectLED['pin'][3], pulseWidthMax);
   }
   if(valueNew < valueOld) {
     console.log("RED")
-     piblaster.setPwm(objectLED['pin'][0], pulseWidthMax);
-     piblaster.setPwm(objectLED['pin'][2], pulseWidthMin);
-     piblaster.setPwm(objectLED['pin'][3], pulseWidthMin);
+     // piblaster.setPwm(objectLED['pin'][0], pulseWidthMax);
+     // piblaster.setPwm(objectLED['pin'][2], pulseWidthMin);
+     // piblaster.setPwm(objectLED['pin'][3], pulseWidthMin);
   }
   if(valueNew == valueOld) {
     console.log("YELLOW")
-     piblaster.setPwm(objectLED['pin'][0], pulseWidthMin);
-     piblaster.setPwm(objectLED['pin'][2], pulseWidthMax);
-     piblaster.setPwm(objectLED['pin'][3], pulseWidthMin);
+     // piblaster.setPwm(objectLED['pin'][0], pulseWidthMin);
+     // piblaster.setPwm(objectLED['pin'][2], pulseWidthMax);
+     // piblaster.setPwm(objectLED['pin'][3], pulseWidthMin);
   }
   console.log("old " + valueOld)
   console.log("new " + valueNew)
@@ -54,32 +54,36 @@ async function start(){
 
       processMoodValues()
 
-      await timeout(1000)
+      await timeout(timeMilliSec)
 }
 
 async function loop(){
-  await timeout(1000)
-  let i = 0;
+  await timeout(timeMilliSec)
+  let i = 0; //EMULATE TIME PASSING
   while(true) {
     i++;
-    console.log(i)
+    console.log(i)  //EMULATE TIME PASSING
     priceFeedETH.methods.latestRoundData().call()
         .then((roundData) => {
             // Do something with roundData
             let valueConverted = ((roundData.answer)/(10**8)).toFixed(2)
             console.log("ETH_PRICE",  valueConverted)
-            if(i%2){
-              valueOld = valueNew;
-              valueNew = valueConverted*10;
-            } else{
-              valueOld = valueNew*10;
-              valueNew = valueConverted;
+            if(i%3 == 0){ //GREEN
+              valueNew = valueConverted+1;
+            }
+            if(i%3 == 1) { //RED
+              // valueOld = valueConverted+1;
+              // valueNew = valueConverted;
+              valueNew = valueConverted-1;
+            }
+            if(i%3 == 2){ ///YELLOW
+            	valueNew = valueOld
             }
 
             processMoodValues()
 
         });
-        await timeout(1000)
+        await timeout(timeMilliSec)
   }
 
 }
